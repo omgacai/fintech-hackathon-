@@ -1,3 +1,4 @@
+#lines to run on terminal
 #pip install st-gsheets-connection
 #pip install streamlit
 #pip install pandas
