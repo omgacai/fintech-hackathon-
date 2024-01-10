@@ -1,4 +1,7 @@
 #pip install st-gsheets-connection
+#pip install streamlit
+#pip install pandas
+#streamlit run hotel1-sample.py
 
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
