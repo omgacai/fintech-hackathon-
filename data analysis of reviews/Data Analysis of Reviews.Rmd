@@ -1,0 +1,54 @@
+---
+title: "Data Analysis of Reviews"
+output: html_document
+date: "2024-01-10"
+---
+
+```{r read-dataset, echo=TRUE}
+library(knitr)
+library(dplyr)
+library(tidyr)
+library(readxl)
+
+rv <- read_excel("reviews.xlsx")
+
+```
+
+```{r organise data, echo=TRUE}
+rvyear <- rv %>% filter(!is.na(date))
+rvyear <- rvyear %>% mutate(year = as.numeric(format(as.Date(date), "%Y"))) #retrieve years from date
+```
+
+```{r line graph for frequency of reviews per year, echo=TRUE}
+revperyear <- rvyear %>% count(year) #count number of reviews per year
+
+plot(revperyear$year, revperyear$n,
+     type = "l",
+     main = "Line Graph of Frequency of Reviews over Time",
+     xlab = "Time",
+     ylab = "Frequency of Reviews",
+     xlim = c(2008, 2020),
+     ylim = c(0, 100000),
+     las = 1)
+```
+
+```{r stacked bar plot for frequency of each star rating per year, echo=TRUE}
+rv1 <- rvyear %>% 
+  group_by(star_ratings, year) %>% 
+  count() #obtain count of each star rating per year
+rv1.spread <- spread(rv1, year, value = n)
+
+# matrix for stacked barplot
+rv1.mat <- as.matrix(rv1.spread[,c(2:11)])
+
+barplot(rv1.mat,
+        col = rainbow(5),
+        las = 1,
+        main = "Barplot of Each Star Rating per Year",
+        beside = T,
+        ylim = c(0, 20000))
+
+legend("topleft", fill = rainbow(5),  legend = rv1.spread$star_ratings)
+
+kable(rv1.spread, caption = "Frequency Distribution of Star Ratings by Year")
+```
