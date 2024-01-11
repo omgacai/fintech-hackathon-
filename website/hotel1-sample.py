@@ -105,7 +105,7 @@ if submit_button:
         #update google sheets
         conn.update(worksheet="Sheet1", data = updated_df)
 
-        st.success("Submitted")
+        st.success("Submitted, your response is under review.")
     
 
 
